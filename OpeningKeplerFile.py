@@ -8,6 +8,7 @@ import pickle, os
 from sklearn.cluster import KMeans
 import numpy as np
 import csv
+print('Hello there')
 filename = 'exoplanets4.csv'
 columnNames = ['loc_rowid', 'mpl_orbper', 'mpl_orbsmax', 'mpl_orbeccen', 'mpl_orbincl', 'mpl_bmassj', 'mpl_radj', 'mpl_dens', 'mst_teff', 'mst_mass', 'mst_rad', 'mpl_massj', 'mpl_masse', 'mpl_rade', 'mpl_rads', 'mpl_ratror']
 data = pandas.read_csv(filename, names = columnNames)
