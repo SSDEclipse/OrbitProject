@@ -16,6 +16,20 @@ print(data.shape)
 planetmass = list(data['pl_massjerr2'])
 starmass = list(data['pl_orbeccenerr2'])
 distance = list(data['pl_name'])
+PlanetMassErrorHigh = list(data['pl_massjlim'])
+PlanetMassErrorLow = list(data['pl_masse'])
+DistanceErrorHigh = list(data['pl_discmethod'])
+DistanceErrorLow = list(data['pl_orbsmax'])
+StarMassErrorHigh = list(data['pl_orbeccenlim'])
+StarMassErrorLow = list(data['st_mass'])
+# print(PlanetMassErrorHigh[0])
+# print(PlanetMassErrorLow[0])
+# print(DistanceErrorHigh[0])
+# print(DistanceErrorLow[0])
+# print(StarMassErrorHigh[0])
+# print(StarMassErrorLow[0])
+
+
 del planetmass[0]
 del starmass[0]
 del distance[0]
@@ -63,8 +77,13 @@ def eccentricitynoroot (e, l, m, u):
     return (1+(2*e*(l**2))/((m**3)*(u**2)))
 for i in range(len(starmassnew)):
     PlanetsOrbitalEccentricitynoroot.append(eccentricitynoroot(PlanetsOrbitalEnergy[i], PlanetsAngularMomentum[i], planetmassnew[i], StandardGravitationalParameter[i]))
-
-
+PlanetsOrbitalEccentricityNoZeroes = []
+for i in range(len(PlanetsOrbitalEccentricitynoroot)):
+    if PlanetsOrbitalEccentricitynoroot[i]>0:
+        PlanetsOrbitalEccentricityNoZeroes.append((PlanetsOrbitalEccentricitynoroot[i])**0.5)
+print(PlanetsOrbitalEccentricityNoZeroes)
+print(len(PlanetsOrbitalEccentricityNoZeroes))
+for i in range(len()):
 def eccentricity (Energy, l, m, u):
     return (1+(2*Energy*(l**2))/((m**3)*(u**2)))**0.5
 PlanetsOrbitalEccentricity = []
