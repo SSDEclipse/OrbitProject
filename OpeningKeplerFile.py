@@ -8,19 +8,21 @@ import pickle, os
 from sklearn.cluster import KMeans
 import numpy as np
 import csv
-filename = 'Planets640FewColumns.csv'
+filename = 'Planets640FewColumns2.csv'
 columnNames = ['pl_hostname', 'pl_letter', 'pl_name', 'pl_discmethod', 'pl_orbsmax', 'pl_orbsmaxerr1', 'pl_orbsmaxerr2', 'pl_orbsmaxlim', 'pl_orbeccen', 'pl_orbeccenerr1', 'pl_orbeccenerr2', 'pl_orbeccenlim', 'st_mass', 'st_masserr1', 'st_masserr2', 'pl_massj', 'pl_massjerr1', 'pl_massjerr2', 'pl_massjlim', 'pl_masse', 'pl_masseerr1', 'pl_masseerr2']
 data = pandas.read_csv(filename, names = columnNames)
 print(data.shape)
-planetmass = list(data['pl_massjerr2'])
-starmass = list(data['pl_orbeccenerr2'])
-distance = list(data['pl_name'])
-PlanetMassErrorHigh = list(data['pl_massjlim'])
-PlanetMassErrorLow = list(data['pl_masse'])
-DistanceErrorHigh = list(data['pl_discmethod'])
-DistanceErrorLow = list(data['pl_orbsmax'])
-StarMassErrorHigh = list(data['pl_orbeccenlim'])
-StarMassErrorLow = list(data['st_mass'])
+planetmass = list(data['pl_masse'])
+starmass = list(data['st_mass'])
+distance = list(data['pl_orbsmax'])
+PlanetMassErrorHigh = list(data['pl_masseerr1'])
+PlanetMassErrorLow = list(data['pl_masseerr2'])
+DistanceErrorHigh = list(data['pl_orbsmaxerr1'])
+DistanceErrorLow = list(data['pl_orbsmaxerr2'])
+StarMassErrorHigh = list(data['st_masserr1'])
+StarMassErrorLow = list(data['st_masserr2'])
+# data['st_masserr2'] = data['st_masserr2'].fillna(0)
+print(PlanetMassErrorLow)
 del PlanetMassErrorHigh[0]
 del PlanetMassErrorLow[0]
 del DistanceErrorHigh[0]
