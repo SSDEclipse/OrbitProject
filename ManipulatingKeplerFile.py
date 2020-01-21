@@ -42,17 +42,17 @@ StarMassErrorLow =[]
 DistanceErrorHigh =[]
 DistanceErrorLow =[]
 for i in range(len(PlanetMassErrorHigh2)):
-    PlanetMassErrorHigh.append(5.989*10**24*PlanetMassErrorHigh2[i])
+    PlanetMassErrorHigh.append(5.976*10**24*PlanetMassErrorHigh2[i])
 for i in range(len(PlanetMassErrorLow2)):
-    PlanetMassErrorLow.append(5.989*10**24*PlanetMassErrorLow2[i])
+    PlanetMassErrorLow.append(5.976*10**24*PlanetMassErrorLow2[i])
 for i in range(len(StarMassErrorHigh2)):
     StarMassErrorHigh.append(1.989*10**30*StarMassErrorHigh2[i])
 for i in range(len(StarMassErrorLow2)):
     StarMassErrorLow.append(1.989*10**30*StarMassErrorLow2[i])
 for i in range(len(DistanceErrorHigh2)):
-    DistanceErrorHigh.append(149597870691.*DistanceErrorHigh2[i])
+    DistanceErrorHigh.append(149597870691*DistanceErrorHigh2[i])
 for i in range(len(DistanceErrorLow2)):
-    DistanceErrorLow.append(149597870691.*DistanceErrorLow2[i])
+    DistanceErrorLow.append(149597870691*DistanceErrorLow2[i])
 
 
 
@@ -99,3 +99,7 @@ for i in range(len(Distance)):
 for i in range(len(Distance)):
     DistanceLow.append(Distance[i]+DistanceErrorLow[i])
 print ('we got em chief')
+print(DistanceErrorLow2)
+print(DistanceHigh)
+print(Distance)
+print(DistanceLow)

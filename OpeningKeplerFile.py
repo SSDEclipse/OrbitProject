@@ -60,7 +60,7 @@ planetmassnew = []
 starmassnew = []
 distancenew = []
 for i in range(len(planetmassnew2)):
-    planetmassnew.append(5.989*10**24*planetmassnew2[i])
+    planetmassnew.append(5.976*10**24*planetmassnew2[i])
 for i in range(len(starmassnew2)):
     starmassnew.append(1.989*10**30*starmassnew2[i])
 for i in range(len(distancenew2)):
