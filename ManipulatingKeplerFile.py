@@ -103,3 +103,30 @@ print(DistanceErrorLow2)
 print(DistanceHigh)
 print(Distance)
 print(DistanceLow)
+
+def Energy (M, m, d):
+    return (6.674*10**-11)*(-1.)*M*m*(1./(2.*d))
+highenergy =[Energy(StarMassHigh[i], PlanetMassHigh[i], DistanceLow[i]) for i in range(len(PlanetMass))]
+lowenergy =[Energy(StarMassLow[i], PlanetMassLow[i], DistanceHigh[i]) for i in range(len(PlanetMass))]
+
+def AngularMomentum (m,d,M):
+    return (m*d*(6.674*10**-11*M*(1/d))**0.5)
+highmomentum = [AngularMomentum(PlanetMassHigh[i], DistanceHigh[i], StarMassHigh[i]) for i in range(len(PlanetMass))]
+lowmomentum = [AngularMomentum(PlanetMassLow[i], DistanceLow[i], StarMassLow[i]) for i in range(len(PlanetMass))]
+
+def eccentricity (Energy, l, m, u):
+    return (1+(2*Energy*(l**2))/((m**3)*(u**2)))
+def SGP (M):
+    return -6.674*10**-11*M
+StandardGPhigh = [SGP(StarMassHigh[i]) for i in range(len(StarMass))]
+StandardGPlow = [SGP(StarMassLow[i]) for i in range(len(StarMass))]
+
+higheccentricity = [eccentricity(lowenergy[i], lowmomentum[i], PlanetMassHigh[i], StandardGPhigh[i]) for i in range(len(PlanetMass))]
+higheccentricitynozeroes = []
+for i in range(len(PlanetMass)):
+    if higheccentricity[i]>0:
+        higheccentricitynozeroes.append((higheccentricity[i])**0.5)
+print higheccentricitynozeroes
+# right now all of them are high af, so check which benefit from being high and keep those
+# whichever result in lower eccentricity when higher should get off the juice
+print min(higheccentricitynozeroes)
