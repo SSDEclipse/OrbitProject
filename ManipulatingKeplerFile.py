@@ -129,4 +129,4 @@ for i in range(len(PlanetMass)):
 print higheccentricitynozeroes
 # right now all of them are high af, so check which benefit from being high and keep those
 # whichever result in lower eccentricity when higher should get off the juice
-print min(higheccentricitynozeroes)
+print len(higheccentricitynozeroes)
