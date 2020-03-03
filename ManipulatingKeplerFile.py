@@ -8,6 +8,10 @@ import pickle, os
 from sklearn.cluster import KMeans
 import numpy as np
 import csv
+from sklearn import linear_model, datasets
+from sklearn.preprocessing import PolynomialFeatures
+
+
 # Loading files of 640 planets w/ mass of planet, star, and distance between them - These numbers are in kilograms
 StarMass = pickle.load(open(os.getcwd()+'/starmassnew', 'rb'))
 PlanetMass = pickle.load(open(os.getcwd()+'/planetmassnew', 'rb'))
@@ -113,14 +117,14 @@ def AngularMomentum (m,d,M):
     return (m*d*(6.674*10**-11*M*(1/d))**0.5)
 highmomentum = [AngularMomentum(PlanetMassHigh[i], DistanceHigh[i], StarMassHigh[i]) for i in range(len(PlanetMass))]
 lowmomentum = [AngularMomentum(PlanetMassLow[i], DistanceLow[i], StarMassLow[i]) for i in range(len(PlanetMass))]
-
+momentum = [AngularMomentum(PlanetMass[i], Distance[i], StarMass[i]) for i in range(len(PlanetMass))]
 def eccentricity (Energy, l, m, u):
     return (1+(2*Energy*(l**2))/((m**3)*(u**2)))
 def SGP (M):
     return -6.674*10**-11*M
 StandardGPhigh = [SGP(StarMassHigh[i]) for i in range(len(StarMass))]
 StandardGPlow = [SGP(StarMassLow[i]) for i in range(len(StarMass))]
-
+StandardGP = [SGP(StarMass[i]) for i in range(len(StarMass))]
 higheccentricity = [eccentricity(lowenergy[i], lowmomentum[i], PlanetMassHigh[i], StandardGPhigh[i]) for i in range(len(PlanetMass))]
 higheccentricitynozeroes = []
 for i in range(len(PlanetMass)):
@@ -130,3 +134,72 @@ print higheccentricitynozeroes
 # right now all of them are high af, so check which benefit from being high and keep those
 # whichever result in lower eccentricity when higher should get off the juice
 print len(higheccentricitynozeroes)
+
+
+
+
+
+
+def coefficient (l, m, SGP):
+    return  (l**2)/(m**2*SGP)
+firstcoefficient = []
+for i in range(len(StarMass)):
+    firstcoefficient.append(coefficient(momentum[i], PlanetMass[i], StandardGP[i]))
+print firstcoefficient
+import pandas as pd
+df = pd.DataFrame(list(zip(Distance, StarMass)),
+               columns =['d', 'smass'])
+clf = linear_model.LinearRegression()
+x=df[:-60]
+print len(x)
+print len(df)
+print Distance[-1]
+print StarMass[-1]
+y=firstcoefficient[:-60]
+clf.fit(x, y)
+y_pred = clf.predict([Distance[-30],StarMass[-30]])
+y_true=firstcoefficient[-40]
+
+print(y_pred/20.4)
+print(y_true)
+print('pls work')
+print (y_pred-y_true)/(y_true)
+preds = []
+for i in range(60):
+    preds.append((clf.predict([Distance[-i], StarMass[-i]]))/20.4)
+acts = firstcoefficient[-60:]
+acts.reverse()
+print len(acts)
+print len(preds)
+predact = list(zip(preds, acts))
+def error (pred, act):
+    return (pred-act)/(act)
+errorpercent = []
+for i in range(60):
+    errorpercent.append(error(preds[i], acts[i]))
+print (sum(errorpercent)/60)
+print preds[1]
+print clf.predict([Distance[-1], StarMass[-1]])
+poly = PolynomialFeatures(degree=1)
+X_ = poly.fit_transform(x)
+clf = linear_model.LinearRegression()
+clf.fit(X_, y)
+predict = [Distance[-40], StarMass[-40]]
+predict_ = poly.fit_transform(predict)
+print 'bot'
+print clf.predict(predict_)
+print y_true
+
+predict2 =[]
+for i in range(60):
+    predict2.append([Distance[-i], StarMass[-1]])
+predict2_ = poly.fit_transform(predict2)
+preds2 = []
+for i in range(60):
+    preds2.append((clf.predict(predict2_)))
+acts2 = firstcoefficient[-60:]
+errorpercent2 = []
+for i in range(60):
+    errorpercent2.append(error(preds2[i], acts2[i]))
+print (sum(errorpercent2))/60
+
