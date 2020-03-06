@@ -78,7 +78,7 @@ PlanetRadius = [7.1492*10**7*i for i in PlanetRadius]
 StarMass = [1.989*10**30*i for i in StarMass]
 Distance = [149597870691.*i for i in Distance]
 PlanetRadius2 = [7.1492*10**7*i for i in PlanetRadius2]
-Distance2 = [7.1492*10**7*i for i in Distance2]
+Distance2 = [149597870691*i for i in Distance2]
 
 
 print PlanetRadius
@@ -419,9 +419,10 @@ for i in range(len(preds3)):
     mindist.append(Distance2[i]/(1+preds3[i]))
 habitables = []
 for i in range(len(mindist)):
-    if mindist[i]>HabitableInner[i]:
-         # if maxdist[i]<HabitableOuter[i]:
-            habitables.append(i)
+    if mindist[i]>0.8*HabitableInner[i]:
+         if maxdist[i]<1.2*HabitableOuter[i]:
+            habitables.append(i+3)
+print 'pls be long'
 print len(habitables)
 print habitables
 print [Distance2[i]/HabitableInner[i] for i in range(len(Distance2))]
@@ -434,7 +435,19 @@ test2 = []
 for i in range(len(test)):
     if test[i]>1:
         test2.append(test[i])
+print 'test'
 print test2
 print HabitableInner[47]
 print HabitableOuter[47]
-print Distance2[47]
+print Distance2[69]/(7.1492*10**7)
+print HabitableInner[69]/(7.1492*10**7)
+print EffTemp[69]
+print AbsoluteMagnitude(Magnitude[69], StarDistance[69])
+x = AbsoluteMagnitude(Magnitude[69], StarDistance[69])
+print BolometricMagnitude(x, BolCorr[69])
+y=BolometricMagnitude(x, BolCorr[69])
+print AbsoluteLuminosity(y)
+z= AbsoluteLuminosity(y)
+print InnerRadius(z)/(1.4*10**11)
+data2.to_csv(r'C:\Users\Krithi\Documents\export_dataframe.csv')
+

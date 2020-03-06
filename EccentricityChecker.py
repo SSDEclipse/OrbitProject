@@ -152,6 +152,11 @@ print len(PlanetMassLow1)
 #         StandardGPlow1.append(StandardGPlow[i])
 # print len(StandardGPlow1)
 # StandardGPlow1 = StandardGPlow
+def coefficient (l, m, SGP):
+    return  (l**2)/(m**2*SGP)
+firstcoefficient =[]
+for i in range(len(Distance)):
+    firstcoefficient.append(coefficient(midmomentum[i], PlanetMass[i], StandardGPmid[i]))
 print highenergy
 print highmomentum
 print PlanetMassLow
@@ -278,6 +283,8 @@ print yeet
 import pandas as pd
 df = pd.DataFrame(list(zip(Distance, StarMass)),
                columns =['d', 'smass'])
+df3 = pd.DataFrame(list(Distance), columns=['d'])
+
 # # print df
 # df = df1[['pl_orbsmax', 'pl_massj']]
 # df1.drop(df1.index[0])
@@ -294,8 +301,9 @@ predict_ = poly.fit_transform(predict)
 print 'bot'
 print clf.predict(predict_)
 print eccentricity[-27]
+
 def error (pred, act):
-    return (pred-act)
+    return (pred-act)/act
 predict2 =[]
 for i in range (80):
     predict2.append([Distance[-i], StarMass[-i]])
@@ -319,4 +327,34 @@ predictreal = [778.57*10**9, 10**30]
 predictreal_ = poly.fit_transform(predictreal)
 print clf.predict(predictreal_)
 print (sum(errordiff))/80
+
+
+x2 = df3[:-80]
+y2 = firstcoefficient[:-80]
+clf2 = linear_model.LinearRegression()
+print x
+print x2
+clf2.fit(x2, y2)
+predict3 =[]
+for i in range (80):
+    predict3.append(Distance[-i])
+
+
+
+acts2 = firstcoefficient[-80:]
+preds3 = []
+for i in range(80):
+    preds3.append(clf2.predict(predict3[i]))
+errordiff2 = []
+for i in range(80):
+    errordiff2.append(error(preds3[i], acts2[i]))
+print sum(errordiff2)/len(errordiff2)
+print firstcoefficient
+print Distance
+# test = []
+# for i in range(len(firstcoefficient)):
+#     test.append(Distance[i]/firstcoefficient[i])
+pickle.dump(Distance, open(os.getcwd()+'/Distance', 'wb'))
+pickle.dump(firstcoefficient, open(os.getcwd()+'/firstcoefficient', 'wb'))
+
 
