@@ -1,7 +1,8 @@
 
 import pandas
 import seaborn as sns
-import matplotlib.pyplot as plt
+import matplotlib as mpl
+import matplotlib.pyplot as plot
 import math
 import pickle, os
 import numpy as np
@@ -11,17 +12,21 @@ from sklearn import linear_model, datasets
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LogisticRegression
 import warnings
+from matplotlib import cm
+from collections import OrderedDict
+
 warnings.filterwarnings("ignore")
 
 data = pandas.read_csv('ecc-mjax-teff-num.csv')
 data2 = pandas.read_csv('predictions.csv')
 print(data.shape)
 import pandas as pd
-# df1 = pd.DataFrame(data, columns = columnNames)
 
 eccentricity = list(data['pl_orbeccen'])
 eccentricityerrorhigh = list(data['pl_orbeccenerr1'])
 eccentricityerrorlow = list(data['pl_orbeccenerr2'])
+name = list(data2['pl_name'])
+
 print eccentricity
 del eccentricity[0]
 del eccentricityerrorhigh[0]
@@ -32,11 +37,7 @@ eccentricityerrorhigh = [float(c) for c in eccentricityerrorhigh]
 eccentricityerrorlow = [float(c) for c in eccentricityerrorlow]
 eccentricityhigh = [eccentricity[i]+eccentricityerrorhigh[i] for i in range(len(eccentricity))]
 eccentricitylow = [eccentricity[i]+eccentricityerrorlow[i] for i in range(len(eccentricity))]
-# print (eccentricityerrorlow)
-# print (eccentricityerrorhigh)
-# print eccentricityhigh
-# print (eccentricity)
-# print eccentricitylow
+
 
 
 PlanetRadius = list(data['pl_radj'])
@@ -81,7 +82,6 @@ PlanetRadius2 = [7.1492*10**7*i for i in PlanetRadius2]
 Distance2 = [149597870691*i for i in Distance2]
 
 
-print PlanetRadius
 PlanetRadiusErrorHigh = list(data['pl_radjerr1'])
 PlanetRadiusErrorLow = list(data['pl_radjerr2'])
 DistanceErrorHigh = list(data['pl_orbsmaxerr1'])
@@ -101,8 +101,6 @@ DistanceErrorLow2 = [float (c) for c in DistanceErrorLow]
 StarMassErrorHigh2 = [float (c) for c in StarMassErrorHigh]
 StarMassErrorLow2 = [float (c) for c in StarMassErrorLow]
 
-print(PlanetRadiusErrorHigh2)
-print(PlanetRadiusErrorLow2)
 PlanetRadiusErrorHigh =[]
 PlanetRadiusErrorLow =[]
 StarMassErrorHigh =[]
@@ -127,9 +125,7 @@ for i in range(len(PlanetRadius)):
     PlanetRadiusHigh.append(PlanetRadius[i]+PlanetRadiusErrorHigh[i])
 for i in range(len(PlanetRadius)):
     PlanetRadiusLow.append(PlanetRadius[i]+PlanetRadiusErrorLow[i])
-print(PlanetRadiusHigh)
-print(PlanetRadius)
-print(PlanetRadiusLow)
+
 
 StarMassHigh= []
 StarMassLow= []
@@ -143,7 +139,6 @@ for i in range(len(Distance)):
     DistanceHigh.append(Distance[i]+DistanceErrorHigh[i])
 for i in range(len(Distance)):
     DistanceLow.append(Distance[i]+DistanceErrorLow[i])
-print ('we got em chief')
 
 def Energy (M, m, d):
     return (6.674*10**-11)*(-1.)*M*m*(1./(2.*d))
@@ -164,25 +159,11 @@ StandardGPlow = [SGP(StarMassLow[i]) for i in range(len(StarMass))]
 StandardGPmid = [SGP(StarMass[i]) for i in range(len(StarMass))]
 
 PlanetRadiusLow1 = []
-print('yeet')
 for i in range(len(PlanetRadiusLow)):
     if PlanetRadiusLow[i]!=0:
         PlanetRadiusLow1.append(PlanetRadiusLow[i])
-    else:
-        print i
-print len(PlanetRadiusLow1)
-# PlanetRadiusLow1 = PlanetRadiusLow
-# StandardGPlow1 =[]
-# for i in range(len(StandardGPlow)):
-#     if StandardGPlow[i]!=0:
-#         StandardGPlow1.append(StandardGPlow[i])
-# print len(StandardGPlow1)
-# StandardGPlow1 = StandardGPlow
-print highenergy
-print highmomentum
-print PlanetRadiusLow
-print StandardGPlow
-print 1./2.
+
+
 def eccentricitynoroot (Energy, l, m, u):
     return (1+(2*Energy*(l**2))/((m**3)*(u**2)))
 
@@ -198,54 +179,13 @@ mideccentricitynozeroes = []
 for i in range(len(PlanetRadius)):
     if mideccentricity[i] > 0:
             mideccentricitynozeroes.append((mideccentricity[i]) ** 0.5)
-# loweccentricitynozeroes = []
-# for i in range(len(PlanetRadiusLow1)):
-#     if loweccentricity[i]>0:
-#         loweccentricitynozeroes.append((loweccentricity[i])**0.5)
-# print len(loweccentricitynozeroes)
-print len(loweccentricity)
-print len(higheccentricitynozeroes)
-print len(higheccentricity)
-print (eccentricity)
-print len(mideccentricity)
+
+
 eccentricitysquared = []
 for i in range(len(eccentricity)):
     eccentricitysquared.append(eccentricity[i]**2)
-print eccentricitysquared
-print higheccentricity
-print mideccentricity
-print eccentricityhigh
-print eccentricity
-print eccentricitylow
-# for i in range(len(PlanetRadiusErrorHigh)):
-#     PlanetRadiusErrorHigh[i]>i>PlanetRadiusErrorLow[i]
-# hmm, it needs a int for the range, but i have floats
-# maybe be a big brain and mutiply all of the elements in the list by 10^n * x so that everything becomes an int
-# find x by looking at how many siggy figgies the error bars use
-print PlanetRadiusErrorHigh
 
-# newlist = []
-# for i in range(len(PlanetRadiusErrorHigh)):
-#     newlist.append(round(PlanetRadiusErrorHigh[i], 3))
-# print round(PlanetRadiusErrorHigh[0], 0)
-# print PlanetRadiusErrorHigh[0]
-# x = round(1.567891234*10, 2)
-# print x
-# print newlist
-# testeccentricity = []
-# for i in range(len(lowmomentum)):
-#     for e in ((lowenergy[i]), (highenergy[i])):
-#         for l in ((lowmomentum[i]), (highmomentum[i])):
-#             for m in ((PlanetRadiusLow[i]), (PlanetRadiusHigh[i])):
-#                 for u in ((StandardGPlow[i]), (StandardGPhigh[i])):
-#                     testeccentricity.append(eccentricitynoroot(i, l, m, u))
-# for i in ((lowenergy[i]), (highenergy[i])):
-#     for l in ((lowmomentum[l]), (highmomentum[l])):
-#         for m in ((PlanetRadiusLow[m]), (PlanetRadiusHigh[m])):
-#             for u in ((StandardGPlow[u]), (StandardGPhigh[u])):
-#                 testeccentricity.append(eccentricitynoroot(i, l, m, u))
-print ((highenergy[0]-midenergy[0]))
-print ((lowenergy[0]-midenergy[0]))
+
 energyerrors = []
 for i in range(len(midenergy)):
     energyerrors.append(math.fabs(highenergy[i]-midenergy[i]))
@@ -260,56 +200,26 @@ for i in range(len(PlanetRadius)):
     PlanetRadiuserrors.append(math.fabs(PlanetRadiusHigh[i]-PlanetRadius[i]))
 print energyerrors
 testeccentricity = [eccentricitynoroot(midenergy[i]+0.0005*energyerrors[i], midmomentum[i]-0.00002*momentumerrors[i], PlanetRadius[i]+0.09*PlanetRadiuserrors[i], StandardGPmid[i]+0.10000*StandardGPerrors[i]) for i in range(len(PlanetRadiusHigh))]
-print len(testeccentricity)
-print len(eccentricity)
-print 'its testin time'
-print testeccentricity
-print eccentricitysquared
-print 'testin over'
+
 eccentricitydifference = []
 for i in range(len(eccentricitysquared)):
     eccentricitydifference.append(testeccentricity[i]-eccentricitysquared[i])
-print eccentricitydifference
-print 'C is an average grade'
-print ((math.fabs(sum(eccentricitydifference))/len(eccentricitydifference)))**0.5
-#digit dataset from sklearn
-digits = datasets.load_digits()
-print len(digits)
-print digits
-#create the LinearRegression model
+
+
 clf = linear_model.LinearRegression()
-#set training set
-x, y = digits.data[:-1], digits.target[:-1]
+
 yeet = zip(eccentricity, PlanetRadius)
 
-print x
-print y
-#train model
-# clf.fit(x, y)
 
-#predict
-# y_pred = clf.predict([digits.data[-1]])
-# y_true = digits.target[-1]
 
-# print(y_pred)
-# print(y_true)
 x_1, y_1 = PlanetRadius, eccentricity
-#
-# print len(x_1)
-# print len(y_1)
-# clf.fit(x_1, y_1)
-print yeet
+
 import pandas as pd
 df = pd.DataFrame(list(zip(PlanetRadius, Distance, PlanetNumber)), columns =['rad', 'dist', 'pnum'])
 
-# # print df
-# df = df1[['pl_orbsmax', 'pl_massj']]
-# df1.drop(df1.index[0])
-print 'ur bad'
-print df
+
 x=df[:-80]
-print len(Distance)
-print len(PlanetRadius)
+
 y=eccentricity[:-80]
 poly = PolynomialFeatures(degree=3)
 X_ = poly.fit_transform(x)
@@ -317,19 +227,15 @@ clf = linear_model.LinearRegression()
 clf.fit(X_, y)
 predict = [PlanetRadius[-27], Distance[-27], PlanetNumber[-27]]
 predict_ = poly.fit_transform(predict)
-print 'bot'
-print clf.predict(predict_)
-print eccentricity[-27]
+
 def error (pred, act):
-    return math.fabs(pred-act)
+    return (pred-act)
 predict2 =[]
 for i in range (80):
     predict2.append([PlanetRadius[-i], Distance[-i], PlanetNumber[-i]])
-print (predict2[-8])
-print (StarMass[-8])
+
 predict2_ = poly.fit_transform(predict2)
-print 'reeeee'
-print predict2
+
 preds2 = []
 for i in range(80):
     preds2.append(clf.predict(predict2_[i]))
@@ -339,14 +245,10 @@ del acts2[8]
 errordiff = []
 for i in range(79):
     errordiff.append(error(preds2[i], acts2[i]))
-print sum(eccentricityerrorlow)/len(eccentricityerrorlow)
-print sum(eccentricity)/len(eccentricity)
 df2 = pd.DataFrame(list(zip(preds2, acts2)),
                columns =['pred', 'act'])
-print df2
 predictreal = [7.57*10**7, 0, 2]
 predictreal_ = poly.fit_transform(predictreal)
-print clf.predict(predictreal_)
 print 'the error is', (sum(errordiff))/80
 
 
@@ -370,10 +272,7 @@ for i in range(len(EffTemp)):
         BolCorr.append(-0.8)
     else:
         BolCorr.append(-2.0)
-print len(BolCorr)
-print len(EffTemp)
-print len(Magnitude)
-print len(StarDistance)
+
 def AbsoluteMagnitude(app, d):
     return (app-5*math.log((d/10), 10))
 def BolometricMagnitude(AbsMag, Correction):
@@ -381,9 +280,9 @@ def BolometricMagnitude(AbsMag, Correction):
 def AbsoluteLuminosity(BolMag):
     return 10**((BolMag-4.72)/(-2.512))
 def InnerRadius (AbsLum):
-    return ((AbsLum/1.1)**0.5)*149597870691.
+    return ((AbsLum/1.1)**0.5)*149597870691.*0.8
 def OuterRadius (AbsLum):
-    return ((AbsLum/0.53)**0.5)*149597870691.
+    return ((AbsLum/0.53)**0.5)*149597870691.*1.2
 StarAbMag = []
 for i in range(len(Magnitude)):
     StarAbMag.append(AbsoluteMagnitude(Magnitude[i], StarDistance[i]))
@@ -410,7 +309,6 @@ predict3_ = poly.fit_transform(predict3)
 preds3 = []
 for i in range(len(PlanetRadius2)):
     preds3.append(clf.predict(predict3_[i]))
-print preds3
 maxdist =[]
 for i in range(len(preds3)):
     maxdist.append(Distance2[i]/(1-preds3[i]))
@@ -419,35 +317,99 @@ for i in range(len(preds3)):
     mindist.append(Distance2[i]/(1+preds3[i]))
 habitables = []
 for i in range(len(mindist)):
-    if mindist[i]>0.8*HabitableInner[i]:
-         if maxdist[i]<1.2*HabitableOuter[i]:
+    if mindist[i]>HabitableInner[i]:
+         if maxdist[i]<HabitableOuter[i]:
             habitables.append(i+3)
-print 'pls be long'
 print len(habitables)
-print habitables
-print [Distance2[i]/HabitableInner[i] for i in range(len(Distance2))]
-print Distance2[47]/HabitableOuter[47]
-print preds3[47]
-print PlanetNumber2[47]
-print PlanetRadius2[47]/(sum(PlanetRadius2)/len(PlanetRadius2))
-test = [Distance2[i]/HabitableInner[i] for i in range(len(Distance2))]
-test2 = []
-for i in range(len(test)):
-    if test[i]>1:
-        test2.append(test[i])
-print 'test'
-print test2
-print HabitableInner[47]
-print HabitableOuter[47]
-print Distance2[69]/(7.1492*10**7)
-print HabitableInner[69]/(7.1492*10**7)
-print EffTemp[69]
-print AbsoluteMagnitude(Magnitude[69], StarDistance[69])
-x = AbsoluteMagnitude(Magnitude[69], StarDistance[69])
-print BolometricMagnitude(x, BolCorr[69])
-y=BolometricMagnitude(x, BolCorr[69])
-print AbsoluteLuminosity(y)
-z= AbsoluteLuminosity(y)
-print InnerRadius(z)/(1.4*10**11)
+names = []
+for i in range(len(habitables)):
+    names.append(name[habitables[i]-2])
+print names
+
+
 data2.to_csv(r'C:\Users\Krithi\Documents\export_dataframe.csv')
+
+
+
+Distance = pickle.load(open(os.getcwd()+'/Distance', 'rb'))
+firstcoefficient = pickle.load(open(os.getcwd()+'/firstcoefficient', 'rb'))
+import pandas as pd
+df3 = pd.DataFrame(list(Distance), columns=['d'])
+
+clf2 = linear_model.LinearRegression()
+
+x2 = df3[80:]
+y2 = firstcoefficient[80:]
+
+# Reverse(y2)
+clf2.fit(x2, y2)
+predict3 =[]
+for i in range (80):
+    predict3.append(Distance[i])
+acts2 = firstcoefficient[0:80]
+preds4 = []
+for i in range(80):
+    preds4.append(clf2.predict(Distance[i]))
+def error (pred, act):
+    return (pred-act)/act
+errordiff2 = []
+for i in range(80):
+    errordiff2.append(error(preds4[i], acts2[i]))
+print "average error is", sum(errordiff2)/len(errordiff2)
+preds5 = []
+for i in range(len(Distance2)):
+    preds5.append(-1*clf2.predict(Distance2[i]))
+
+
+
+
+
+plot.style.use('default')
+fig = plot.figure()
+
+fig.add_subplot(222, projection='polar')
+
+# Set the title of the polar plot
+
+plot.title('Graph of Exoplanet Orbit vs Habitable Zones')
+
+# Radian values upto 2*pi
+print len(Distance2)
+print len(preds3)
+rads = np.arange(0, (2 * np.pi), 0.01)
+
+a = 1
+
+b = 1
+
+k = 1
+#
+# fig = plot.figure()
+#
+# for radian in rads:
+#     radius =  ((Distance2[69]/149597870691)/(1+preds3[69]*np.cos(k * radian)))
+#
+#
+#     plot.polar(radian, radius, 'o', label='o')
+#
+# for radian in rads:
+#     plot.polar(radian,HabitableInner[69]/149597870691,'o', label='o')
+#     plot.style.use('seaborn')
+#
+# for radian in rads:
+#     plot.polar(radian,HabitableOuter[69]/149597870691,'o', label='o')
+#     plot.style.use('seaborn')
+#
+# fig =plot.figure(figsize=(1, 1))
+print len(Distance2)
+print len(preds5)
+print 'this is where the fun begins'
+print habitables
+for i in range(len(habitables)):
+    print names[i]
+    print preds5[habitables[i]-3]/149597870691
+    print preds3[habitables[i]]
+    print HabitableInner[habitables[i]-3]/149597870691
+    print HabitableOuter[habitables[i]-3]/149597870691
+# plot.show()
 
