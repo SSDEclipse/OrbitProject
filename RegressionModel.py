@@ -3,14 +3,12 @@ import pandas as pd
 import numpy as np
 #digit dataset from sklearn
 digits = datasets.load_digits()
-print len(digits)
-print digits
+
 #create the LinearRegression model
 clf = linear_model.LinearRegression()
 
 #set training set
 x, y = digits.data[:-1], digits.target[:-1]
-print len(digits)
 #train model
 clf.fit(x, y)
 
@@ -18,8 +16,6 @@ clf.fit(x, y)
 y_pred = clf.predict([digits.data[-1]])
 y_true = digits.target[-1]
 
-print(y_pred)
-print(y_true)
 
 # data = datasets.load_boston() ## loads Boston dataset from datasets library
 #

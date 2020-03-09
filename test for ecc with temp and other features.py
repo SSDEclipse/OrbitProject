@@ -27,7 +27,6 @@ eccentricityerrorhigh = list(data['pl_orbeccenerr1'])
 eccentricityerrorlow = list(data['pl_orbeccenerr2'])
 name = list(data2['pl_name'])
 
-print eccentricity
 del eccentricity[0]
 del eccentricityerrorhigh[0]
 del eccentricityerrorlow[0]
@@ -198,7 +197,6 @@ for i in range(len(StandardGPmid)):
 PlanetRadiuserrors = []
 for i in range(len(PlanetRadius)):
     PlanetRadiuserrors.append(math.fabs(PlanetRadiusHigh[i]-PlanetRadius[i]))
-print energyerrors
 testeccentricity = [eccentricitynoroot(midenergy[i]+0.0005*energyerrors[i], midmomentum[i]-0.00002*momentumerrors[i], PlanetRadius[i]+0.09*PlanetRadiuserrors[i], StandardGPmid[i]+0.10000*StandardGPerrors[i]) for i in range(len(PlanetRadiusHigh))]
 
 eccentricitydifference = []
@@ -247,9 +245,9 @@ for i in range(79):
     errordiff.append(error(preds2[i], acts2[i]))
 df2 = pd.DataFrame(list(zip(preds2, acts2)),
                columns =['pred', 'act'])
-predictreal = [7.57*10**7, 0, 2]
+predictreal = [6.371*10**6, 149597870691, 8]
 predictreal_ = poly.fit_transform(predictreal)
-print 'the error is', (sum(errordiff))/80
+print 'the error of the eccentricity model is', (sum(errordiff))/80
 
 
 
@@ -320,11 +318,9 @@ for i in range(len(mindist)):
     if mindist[i]>HabitableInner[i]:
          if maxdist[i]<HabitableOuter[i]:
             habitables.append(i+3)
-print len(habitables)
 names = []
 for i in range(len(habitables)):
     names.append(name[habitables[i]-2])
-print names
 
 
 data2.to_csv(r'C:\Users\Krithi\Documents\export_dataframe.csv')
@@ -341,7 +337,6 @@ clf2 = linear_model.LinearRegression()
 x2 = df3[80:]
 y2 = firstcoefficient[80:]
 
-# Reverse(y2)
 clf2.fit(x2, y2)
 predict3 =[]
 for i in range (80):
@@ -355,7 +350,7 @@ def error (pred, act):
 errordiff2 = []
 for i in range(80):
     errordiff2.append(error(preds4[i], acts2[i]))
-print "average error is", sum(errordiff2)/len(errordiff2)
+print "average error of first coefficient model is", sum(errordiff2)/len(errordiff2)
 preds5 = []
 for i in range(len(Distance2)):
     preds5.append(-1*clf2.predict(Distance2[i]))
@@ -374,8 +369,6 @@ fig.add_subplot(222, projection='polar')
 plot.title('Graph of Exoplanet Orbit vs Habitable Zones')
 
 # Radian values upto 2*pi
-print len(Distance2)
-print len(preds3)
 rads = np.arange(0, (2 * np.pi), 0.01)
 
 a = 1
@@ -401,15 +394,23 @@ k = 1
 #     plot.style.use('seaborn')
 #
 # fig =plot.figure(figsize=(1, 1))
-print len(Distance2)
-print len(preds5)
-print 'this is where the fun begins'
-print habitables
 for i in range(len(habitables)):
     print names[i]
+    print Distance2[habitables[i]-3]/149597870691
     print preds5[habitables[i]-3]/149597870691
     print preds3[habitables[i]]
     print HabitableInner[habitables[i]-3]/149597870691
     print HabitableOuter[habitables[i]-3]/149597870691
+eckslow = []
+for i in range(len(eccentricityerrorlow)):
+    if eccentricityerrorlow[i]<0:
+        eckslow.append(eccentricityerrorlow[i])
+for i in range(280):
+    eckslow.append(0*i)
 # plot.show()
+habitables2 = []
+for i in range(len(mindist)):
+    if mindist[i]>0.95*HabitableInner[i]:
+         if maxdist[i]<HabitableOuter[i]:
+            habitables2.append(i+3)
 

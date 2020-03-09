@@ -37,8 +37,7 @@ DistanceErrorHigh2 = [float (c) for c in DistanceErrorHigh]
 DistanceErrorLow2 = [float (c) for c in DistanceErrorLow]
 StarMassErrorHigh2 = [float (c) for c in StarMassErrorHigh]
 StarMassErrorLow2 = [float (c) for c in StarMassErrorLow]
-print(PlanetMassErrorHigh2)
-print(PlanetMassErrorLow2)
+
 PlanetMassErrorHigh =[]
 PlanetMassErrorLow =[]
 StarMassErrorHigh =[]
@@ -61,22 +60,7 @@ for i in range(len(DistanceErrorLow2)):
 
 
 
-print(len(PlanetMass))
-print(len(StarMass))
-print(len(Distance))
-print(len(PlanetMassErrorHigh))
-print(len(PlanetMassErrorLow))
-print(len(StarMassErrorLow))
-print(len(StarMassErrorHigh))
-print(len(DistanceErrorLow))
-print(len(DistanceErrorHigh))
-print((PlanetMassErrorHigh))
-print((PlanetMassErrorLow))
-print('yeet')
-print((StarMassErrorLow))
-print((StarMassErrorHigh))
-print((DistanceErrorLow))
-print((DistanceErrorHigh))
+
 
 
 # trying to add errors to recorded values
@@ -86,9 +70,6 @@ for i in range(len(PlanetMass)):
     PlanetMassHigh.append(PlanetMass[i]+PlanetMassErrorHigh[i])
 for i in range(len(PlanetMass)):
     PlanetMassLow.append(PlanetMass[i]+PlanetMassErrorLow[i])
-print(PlanetMassHigh)
-print(PlanetMass)
-print(PlanetMassLow)
 
 StarMassHigh= []
 StarMassLow= []
@@ -102,11 +83,7 @@ for i in range(len(Distance)):
     DistanceHigh.append(Distance[i]+DistanceErrorHigh[i])
 for i in range(len(Distance)):
     DistanceLow.append(Distance[i]+DistanceErrorLow[i])
-print ('we got em chief')
-print(DistanceErrorLow2)
-print(DistanceHigh)
-print(Distance)
-print(DistanceLow)
+
 
 def Energy (M, m, d):
     return (6.674*10**-11)*(-1.)*M*m*(1./(2.*d))
@@ -130,10 +107,8 @@ higheccentricitynozeroes = []
 for i in range(len(PlanetMass)):
     if higheccentricity[i]>0:
         higheccentricitynozeroes.append((higheccentricity[i])**0.5)
-print higheccentricitynozeroes
 # right now all of them are high af, so check which benefit from being high and keep those
 # whichever result in lower eccentricity when higher should get off the juice
-print len(higheccentricitynozeroes)
 
 
 
@@ -145,50 +120,37 @@ def coefficient (l, m, SGP):
 firstcoefficient = []
 for i in range(len(StarMass)):
     firstcoefficient.append(coefficient(momentum[i], PlanetMass[i], StandardGP[i]))
-print firstcoefficient
 import pandas as pd
 df = pd.DataFrame(list(zip(Distance, StarMass)),
                columns =['d', 'smass'])
 clf = linear_model.LinearRegression()
 x=df[:-60]
-print len(x)
-print len(df)
-print Distance[-1]
-print StarMass[-1]
+
 y=firstcoefficient[:-60]
 clf.fit(x, y)
 y_pred = clf.predict([Distance[-30],StarMass[-30]])
 y_true=firstcoefficient[-40]
 
-print(y_pred/20.4)
-print(y_true)
-print('pls work')
-print (y_pred-y_true)/(y_true)
+
 preds = []
 for i in range(60):
     preds.append((clf.predict([Distance[-i], StarMass[-i]]))/20.4)
 acts = firstcoefficient[-60:]
 acts.reverse()
-print len(acts)
-print len(preds)
+
 predact = list(zip(preds, acts))
 def error (pred, act):
     return (pred-act)/(act)
 errorpercent = []
 for i in range(60):
     errorpercent.append(error(preds[i], acts[i]))
-print (sum(errorpercent)/60)
-print preds[1]
-print clf.predict([Distance[-1], StarMass[-1]])
 poly = PolynomialFeatures(degree=1)
 X_ = poly.fit_transform(x)
 clf = linear_model.LinearRegression()
 clf.fit(X_, y)
 predict = [Distance[-40], StarMass[-40]]
 predict_ = poly.fit_transform(predict)
-print 'bot'
-print clf.predict(predict_)
-print y_true
+
 
 predict2 =[]
 for i in range(60):
@@ -201,5 +163,4 @@ acts2 = firstcoefficient[-60:]
 errorpercent2 = []
 for i in range(60):
     errorpercent2.append(error(preds2[i], acts2[i]))
-print (sum(errorpercent2))/60
 
